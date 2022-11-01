@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace BeehiveManagementSystem
 {
-    internal class Queen : Bee
+    internal class Queen : Bee , INotifyPropertyChanged
     {
         private IWorker[] workers = new IWorker[0];
         public const float EGGS_PER_SHIFT = 0.45f;
@@ -41,6 +42,7 @@ namespace BeehiveManagementSystem
                 $"\nEgg count: {eggs: 0.0}\nUnassigned workders: {unassignedWorkders: 0.0}\n" +
                 $"{WorkerStatus("Nectar Collecotr")}\n{WorkerStatus("Honey Manufacturer")}" +
                 $"\n{WorkerStatus("Egg Care")}\nTOTAL WORKERS: {workers.Length}";
+            OnPropertyChanged("StatusReport");
         }
 
         public void CareForEggs(float eggsToConvert)
@@ -89,6 +91,10 @@ namespace BeehiveManagementSystem
             HoneyVault.ConsumeHoney(unassignedWorkders * HONEY_PER_UNASSIGNED_WORKER);
             UpdateStatusReport();
         }
-
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
 }
