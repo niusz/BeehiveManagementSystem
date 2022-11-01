@@ -8,15 +8,15 @@ using System.Windows.Controls;
 
 namespace BeehiveManagementSystem
 {
-    internal class Bee
+    abstract class Bee : IWorker
     {
         public string Job { get; private set; }
-        public virtual float CostPerShift { get; }
+        public abstract float CostPerShift { get; }
         public Bee(string job)
         {
             Job = job;
         }
-        protected virtual void DoJob() { }
+        protected abstract void DoJob();
         public void  WorkTheNextShift()
         {
             if (HoneyVault.ConsumeHoney(CostPerShift)) DoJob(); 
